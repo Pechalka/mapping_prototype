@@ -1,0 +1,80 @@
+    <div data-bind="foreach : items">
+        <select data-bind="value : type, options : $parent.types">
+        </select>
+        <div data-bind="template : type">
+        </div>
+        <a href="javascript:void(0)" data-bind="click: $parent.delete">delete</a>
+    </div>
+    <div>
+        <input type="text" data-bind="value : from"/>
+        <input type="text" data-bind="value : to"/>
+        <a href="javascript:void" data-bind="click : add">add</a>
+    </div>
+
+    <script type="text/javascript">
+    $(function() {
+
+        // var dataService = {
+        //     data : null,
+        //     get : function(){
+        //         return data;
+        //     },
+        //     set : function(data){
+        //         if (data != this.data)
+        //             this.dta = data;
+        //     }
+        // };
+
+        var Page = function(model){
+            var self = this;
+            self.items = ko.mapping.fromJS(model);
+            self.types = ['def', 'eql', 'none'];
+            self.fromList = ['1', '5', '7'];
+
+            self.to = ko.observable('');
+            self.from = ko.observable('');
+
+
+            self.delete = function(item){
+                self.items.remove(item);
+            };
+
+            self.add = function(){
+                var item = ko.mapping.fromJS({ to : self.to(), from : self.from(), type : 'def' });
+                self.items.push(item);
+
+                self.to('');    self.from('');
+            }
+
+
+            ko.computed(function(){ // sync
+                var data = { 
+                    mappings : ko.toJS(self.items)
+                };
+                $.post('/mapping/update', data);
+            });
+        };
+
+
+        var model = <%-JSON.stringify(m)%>;
+        var viewModel = new Page(model);
+
+        ko.applyBindings(viewModel);
+
+        
+
+    });
+    </script>
+<!-- tempaltes -->
+<script type="text/html" id="def">
+    <span data-bind="text : from"></span>    
+    <input type="text" data-bind="value : to"/>    
+</script>
+<script type="text/html" id="eql">
+    <span data-bind="text : from"></span>    
+    <select data-bind="value : from, options : $parent.fromList"></select>
+</script>
+<script type="text/html" id="none">
+    <span data-bind="text : from"></span>    
+    none
+</script>
