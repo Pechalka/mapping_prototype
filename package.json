@@ -1,6 +1,17 @@
 {
-  "version": "0.1.0",
-  "dependencies": {
+  "name": "mapping_prototype",
+  "version": "0.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Pechalka/mapping_prototype.git"
+  },
+  "license": "BSD",
+    "dependencies": {
     "express": "3.2.3",
     "ejs": "*",
     "express-ejs-layouts": "*"
